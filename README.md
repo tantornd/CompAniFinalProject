@@ -1,4 +1,4 @@
-# Cloth Simulation — Mass-Spring vs XPBD
+# Cloth Simulation - Mass-Spring vs XPBD
 
 **วิชา:** Computer Animation (2110512)  
 **ภาคการศึกษา:** เทอมปลาย 2568  
@@ -78,7 +78,7 @@ python visualization/animate_results.py --save
 ```
 Output files: `experiments/results/animation.gif`, `experiments/results/energy_comparison.png`
 
-**Run the interactive browser demo** — open directly, no server needed:
+**Run the interactive browser demo** - open directly, no server needed:
 ```
 demo/index.html
 ```
