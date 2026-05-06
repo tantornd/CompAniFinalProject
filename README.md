@@ -2,7 +2,7 @@
 
 **วิชา:** Computer Animation (2110512)  
 **ภาคการศึกษา:** เทอมปลาย 2568  
-**GitHub:** *tantornd*  
+**GitHub:** *https://github.com/tantornd/CompAniFinalProject*  
 **Keywords:** Cloth Simulation, Position-Based Dynamics, XPBD, Mass-Spring, Real-time Animation
 
 ---
