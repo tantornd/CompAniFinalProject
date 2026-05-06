@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# NumPy / simulation outputs
+experiments/results/energy_log.npz
+experiments/results/positions.npz
+experiments/results/animation.gif
+experiments/results/energy_comparison.png
+
+# Keep the committed benchmark outputs
+!experiments/results/runtime.csv
+!experiments/results/plots.png
+
+# Report build artifacts (keep the final PDF)
+report/_build_report.py
+!report/final_report.pdf
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Misc
+*.log
+*.tmp

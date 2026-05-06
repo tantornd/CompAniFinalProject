@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloth Simulation — Mass-Spring vs XPBD</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="scanlines"></div>
+
+<header>
+  <h1>Cloth Simulation</h1>
+  <p>Computer Animation · 2110512 · Chulalongkorn University</p>
+  <div class="badge">Mass-Spring Baseline vs XPBD Proposed</div>
+</header>
+
+<div class="app">
+
+  <!--controls-->
+  <div class="panel">
+    <div class="panel-title">Algorithm</div>
+    <div class="control-group">
+      <div class="toggle-group">
+        <button class="toggle-btn active-red" id="btnBaseline" onclick="setMode('baseline')">
+          Baseline<br><small style="font-size:9px;opacity:0.7">Mass-Spring</small>
+        </button>
+        <button class="toggle-btn" id="btnXPBD" onclick="setMode('xpbd')">
+          Proposed<br><small style="font-size:9px;opacity:0.7">XPBD</small>
+        </button>
+      </div>
+    </div>
+
+    <div class="panel-title">Parameters</div>
+    <div class="control-group">
+      <div class="control-row">
+        <div class="control-label">Timestep (Δt) <span id="lblDt">0.016</span>s</div>
+        <input type="range" id="slDt" min="2" max="33" value="16"
+               oninput="updateParam('dt', this.value/1000)">
+      </div>
+      <div class="control-row">
+        <div class="control-label">Stiffness <span id="lblK">400</span></div>
+        <input type="range" id="slK" min="50" max="1200" value="400"
+               oninput="updateParam('k', +this.value)">
+      </div>
+      <div class="control-row">
+        <div class="control-label">Wind <span id="lblWind">0.3</span></div>
+        <input type="range" id="slWind" min="0" max="100" value="30"
+               oninput="updateParam('wind', this.value/100)">
+      </div>
+      <div class="control-row">
+        <div class="control-label">Gravity <span id="lblGrav">9.8</span></div>
+        <input type="range" id="slGrav" min="0" max="30" value="9" step="0.1"
+               oninput="updateParam('gravity', +this.value + 0.8)">
+      </div>
+      <div class="control-row">
+        <div class="control-label">Grid Size <span id="lblGrid">16×16</span></div>
+        <input type="range" id="slGrid" min="8" max="28" value="16" step="4"
+               oninput="setGrid(+this.value)">
+      </div>
+    </div>
+
+    <div class="panel-title">Actions</div>
+    <div class="control-group">
+      <button class="action-btn" onclick="resetSim()">↺ Reset Cloth</button>
+      <button class="action-btn danger" onclick="explode()">Chaos Blast</button>
+    </div>
+  </div>
+
+  <!--canvas-->
+  <div class="canvas-wrap">
+    <canvas id="simCanvas"></canvas>
+    <div class="canvas-label" id="canvasLabel">MASS-SPRING BASELINE</div>
+    <div class="fps-badge" id="fpsBadge">-- FPS</div>
+  </div>
+
+  <!--stats-->
+  <div class="panel">
+    <div class="panel-title">Live Metrics</div>
+    <div class="stat-block">
+      <div class="stat-row bad" id="statModeRow">
+        <span>Mode</span>
+        <span class="stat-val" id="statMode">Baseline</span>
+      </div>
+      <div class="stat-row">
+        <span>Vertices</span>
+        <span class="stat-val" id="statVerts">256</span>
+      </div>
+      <div class="stat-row">
+        <span>Constraints</span>
+        <span class="stat-val" id="statConst">—</span>
+      </div>
+      <div class="stat-row">
+        <span>Sim ms/frame</span>
+        <span class="stat-val" id="statMs">—</span>
+      </div>
+      <div class="stat-row bad" id="statEnergyRow">
+        <span>Energy Error</span>
+        <span class="stat-val" id="statEnergy">—</span>
+      </div>
+      <div class="stat-row">
+        <span>Stability</span>
+        <span class="stat-val" id="statStability">—</span>
+      </div>
+    </div>
+
+    <div class="panel-title">Energy Error Over Time</div>
+    <canvas id="energyCanvas"></canvas>
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#ff2f6e"></div>Baseline
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#7b2fff"></div>XPBD
+      </div>
+    </div>
+
+    <div class="panel-title">Algorithm Comparison</div>
+    <table>
+      <tr><th></th><th>Baseline</th><th>XPBD</th></tr>
+      <tr><td>Integration</td> <td class="warn">Euler</td>       <td class="good">PBD</td></tr>
+      <tr><td>Stability</td>   <td class="warn">Conditional</td> <td class="good">Unconditional</td></tr>
+      <tr><td>Stiff spring</td><td class="warn">Explodes</td>    <td class="good">Stable</td></tr>
+      <tr><td>Complexity</td>  <td>O(n)</td>                     <td>O(n·iter)</td></tr>
+      <tr><td>Damping</td>     <td class="warn">Manual</td>      <td class="good">Implicit</td></tr>
+    </table>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="mode-indicator">
+      <div class="mode-dot red" id="modeDot"></div>
+      <span id="modeLabel">MASS-SPRING EXPLICIT EULER</span>
+    </div>
+    <div>Computer Animation 2110512</div>
+    <div>Drag cloth to interact · Chaos Blast to stress-test</div>
+  </div>
+
+</div>
+
+<script src="js/cloth.js"></script>
+<script src="js/baseline.js"></script>
+<script src="js/xpbd.js"></script>
+<script src="js/renderer.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>
