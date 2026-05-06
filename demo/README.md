@@ -1,4 +1,4 @@
-# Cloth Simulation — Interactive Browser Demo
+# Cloth Simulation: Interactive Browser Demo
 
 Open `index.html` directly in any modern browser.
 
